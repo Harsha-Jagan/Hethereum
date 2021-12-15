@@ -1,0 +1,20 @@
+{
+  "name": "hethereum",
+  "version": "1.0.0",
+  "description": "A decentralized computer based off of Ethereum built from scratch",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harsha-Jagan/Hethereum.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harsha-Jagan/Hethereum/issues"
+  },
+  "homepage": "https://github.com/Harsha-Jagan/Hethereum#readme"
+}
