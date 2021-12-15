@@ -41,6 +41,11 @@ class Interpreter {
           case SUB:
           case MUL:
           case DIV:
+          case LT:
+          case GT:
+          case EQ:
+          case AND:
+          case OR:
             const a = this.state.stack.pop();
             const b = this.state.stack.pop();
 
@@ -50,7 +55,11 @@ class Interpreter {
             else if (opCode === SUB) result = a - b;
             else if (opCode === MUL) result = a * b;
             else if (opCode === DIV) result = a / b;
-
+            else if (opCode === LT) result = a < b ? 1 : 0;
+            else if (opCode === GT) result = a > b ? 1 : 0;
+            else if (opCode === EQ) result = a === b ? 1 : 0;
+            else if (opCode === AND) result = a && b;
+            else if (opCode === OR) result = a || b;
             this.state.stack.push(result);
             break;
           default:
@@ -71,6 +80,12 @@ function main() {
   const code2 = [PUSH, 2, PUSH, 3, SUB, STOP];
   const code3 = [PUSH, 2, PUSH, 3, MUL, STOP];
   const code4 = [PUSH, 2, PUSH, 3, DIV, STOP];
+  //   comparisons
+  const code5 = [PUSH, 2, PUSH, 3, LT, STOP];
+  const code6 = [PUSH, 2, PUSH, 3, GT, STOP];
+  const code7 = [PUSH, 2, PUSH, 3, EQ, STOP];
+  const code8 = [PUSH, 1, PUSH, 1, AND, STOP];
+  const code9 = [PUSH, 0, PUSH, 0, OR, STOP];
 
   result = interpreter.runCode(code1);
   console.log(result);
@@ -82,6 +97,22 @@ function main() {
   console.log(result);
 
   result = interpreter.runCode(code4);
+  console.log(result);
+
+  //   comparisons
+  result = interpreter.runCode(code5);
+  console.log(result);
+
+  result = interpreter.runCode(code6);
+  console.log(result);
+
+  result = interpreter.runCode(code7);
+  console.log(result);
+
+  result = interpreter.runCode(code8);
+  console.log(result);
+
+  result = interpreter.runCode(code9);
   console.log(result);
 }
 
