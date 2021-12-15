@@ -4,7 +4,8 @@
   "description": "A decentralized computer based off of Ethereum built from scratch",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "holidity": "node holidity.js"
   },
   "repository": {
     "type": "git",
