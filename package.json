@@ -4,8 +4,8 @@
   "description": "A decentralized computer based off of Ethereum built from scratch",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "holidity": "node holidity.js"
+    "test": "jest --watchAll",
+    "holidity": "node interpreter/holidity.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/Harsha-Jagan/Hethereum/issues"
   },
-  "homepage": "https://github.com/Harsha-Jagan/Hethereum#readme"
+  "homepage": "https://github.com/Harsha-Jagan/Hethereum#readme",
+  "dependencies": {
+    "jest": "^27.4.5"
+  }
 }
