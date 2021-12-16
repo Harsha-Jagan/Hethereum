@@ -111,7 +111,7 @@ class Interpreter {
             }
 
             let result;
-            console.log(opCode);
+            // console.log(opCode);
             if (opCode === ADD) result = a + b;
             else if (opCode === SUB) result = a - b;
             else if (opCode === MUL) result = a * b;
@@ -261,7 +261,7 @@ function main() {
   }
 }
 
-main();
+// main();
 
 Interpreter.OPCODE_MAP = OPCODE_MAP;
 module.exports = Interpreter;
