@@ -12,9 +12,13 @@ const EQ = "EQ";
 const AND = "AND";
 const OR = "OR";
 
-//
+//jumps
 const JUMP = "JUMP";
 const JUMPI = "JUMPI";
+
+//
+const EXECUTION_COMPLETE = "Execution complete";
+const EXECUTION_LIMIT = 10000;
 
 class Interpreter {
   constructor() {
@@ -22,42 +26,69 @@ class Interpreter {
       programCounter: 0,
       stack: [],
       code: [],
+      executionCount: 0,
     };
   }
 
   jump() {
     const destination = this.state.stack.pop();
+
+    if (destination < 0 || destination >= this.state.code.length) {
+      throw new Error(`Invalid destination: ${destination}`);
+    }
+
     this.state.programCounter = destination;
     this.state.programCounter--;
   }
 
   runCode(code) {
     this.state.programCounter = 0;
+    this.state.executionCount = 0;
     this.state.code = code;
+    this.state.stack = [];
 
     while (this.state.programCounter < this.state.code.length) {
+      this.state.executionCount++;
+      if (this.state.executionCount > EXECUTION_LIMIT) {
+        throw new Error(
+          `Check for an infinite loop. Execution limit of ${EXECUTION_LIMIT} exceeded`
+        );
+      }
+
       const opCode = this.state.code[this.state.programCounter];
 
       try {
         switch (opCode) {
           case STOP:
-            throw new Error("Execution complete");
+            throw new Error(EXECUTION_COMPLETE);
           case PUSH:
             this.state.programCounter++;
+            if (this.state.programCounter === this.state.code.length) {
+              throw new Error(`The 'PUSH' instruction cannot be last`);
+            }
+
             const value = this.state.code[this.state.programCounter];
             this.state.stack.push(value);
             break;
+          case LT:
+          case GT:
+          case EQ:
           case ADD:
           case SUB:
           case MUL:
           case DIV:
-          case LT:
-          case GT:
-          case EQ:
           case AND:
           case OR:
+            if (this.state.stack.length < 2) {
+              throw new Error(`Not enough values pushed to the stack`);
+            }
             const a = this.state.stack.pop();
             const b = this.state.stack.pop();
+            if (typeof a != "number" || typeof b !== "number") {
+              throw new Error(
+                `operands are not numbers. Found a:${a} and b:${b}`
+              );
+            }
 
             let result;
             console.log(opCode);
@@ -83,10 +114,15 @@ class Interpreter {
             }
             break;
           default:
+            throw new Error(`Invalid opCode ${opCode}`);
             break;
         }
       } catch (error) {
-        return this.state.stack[this.state.stack.length - 1];
+        if (error.message === EXECUTION_COMPLETE) {
+          return this.state.stack[this.state.stack.length - 1];
+        }
+
+        throw error;
       }
 
       this.state.programCounter++;
@@ -123,6 +159,14 @@ function main() {
     STOP,
   ];
 
+  const code12 = [PUSH, -1, JUMP];
+  const code13 = [PUSH];
+
+  const code14 = [PUSH, 0, JUMP, STOP];
+  const code15 = ["test"];
+  const code16 = [ADD];
+  const code17 = [PUSH, 10, PUSH, "test", ADD];
+
   result = interpreter.runCode(code1);
   console.log(result);
 
@@ -151,11 +195,49 @@ function main() {
   result = interpreter.runCode(code9);
   console.log(result);
 
+  //   jumps
   result = interpreter.runCode(code10);
   console.log(result);
 
   result = interpreter.runCode(code11);
   console.log(result);
+
+  //errors
+  try {
+    result = interpreter.runCode(code12);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  try {
+    result = interpreter.runCode(code13);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  try {
+    result = interpreter.runCode(code14);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  try {
+    result = interpreter.runCode(code15);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  try {
+    result = interpreter.runCode(code16);
+  } catch (error) {
+    console.log(error.message);
+  }
+
+  try {
+    result = interpreter.runCode(code17);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 main();
